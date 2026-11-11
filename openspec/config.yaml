@@ -1,0 +1,49 @@
+schema: spec-driven
+
+context: |
+  Project: Harley Store — sistema web de gestão da loja e oficina
+  Harley-Davidson (projeto acadêmico de Marcelo e Daniel).
+  Domain: estoque de produtos e de motos, vendas no balcão, ordens de serviço
+  da oficina, compras de fornecedores, clientes e suas motos, e painel
+  financeiro. Conceitos em docs/domain-model.md; visão em docs/project-overview.md.
+  Tech stack: Python 3.12 + Reflex 0.7.14 (venv em .venv); Xano (dados e
+  autenticação, API REST, plano Free); SendGrid (e-mails). Ambiente: venv +
+  pip com requirements.txt (não usar uv).
+  Frontend: Reflex é a tecnologia obrigatória para implementação das
+  interfaces frontend do projeto. Não introduzir outra tecnologia de frontend
+  sem uma mudança explícita da decisão arquitetural.
+  Architecture: cada tela = harley_store/state/<nome>_state.py +
+  harley_store/pages/<nome>.py; rotas em harley_store/harley_store.py.
+  Dados só via harley_store/xano_client.py; não há banco local
+  (rxconfig.py com db_url=None). O PATCH do Xano substitui o registro
+  inteiro: sempre enviar todos os campos. Datas do Xano em epoch ms (UTC);
+  dia e mês seguem America/Sao_Paulo. Esquema espelhado em xano/table/ e
+  endpoints em xano/api/; alterações aplicadas por scripts/aplicar_xano.ps1.
+  Security: toda ação exige sessão válida no servidor (ExigeSessaoMiddleware);
+  perfis conferidos no Xano; credenciais só no .env, fora do git. O mesmo
+  Xano atende desenvolvimento e produção: testes só com registros TESTE.
+  Development: mudanças incrementais pelo OpenSpec; escopo enxuto, sem campos
+  ou tabelas extras no Xano sem pedido explícito. Testes em tests/
+  (unittest, sem o Xano real).
+  Language: escrever os artefatos em português do Brasil; manter em inglês
+  os cabeçalhos estruturais do OpenSpec e as palavras SHALL/MUST.
+
+rules:
+  proposal:
+    - Deixar explícito o que está fora do escopo.
+  specs:
+    - Organizar as capacidades por domínio
+      (openspec/specs/<domínio>/<capacidade>).
+  tasks:
+    - Incluir uma tarefa de verificação (teste automático ou conferência no app).
+
+operations:
+  apply:
+    guidance:
+      - Rodar .venv\Scripts\python.exe -m unittest discover -s tests -t . antes
+        de concluir.
+  archive:
+    guidance:
+      - Confirmar que a implementação corresponde às specs antes de arquivar.
+githubCopilot:
+  cloudAgent: false

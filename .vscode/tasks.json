@@ -1,0 +1,14 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Harley: reflex run (http://localhost:3000)",
+            "type": "shell",
+            "command": "& '${workspaceFolder}/.venv/Scripts/reflex.exe' run",
+            "options": { "cwd": "${workspaceFolder}", "env": { "PYTHONUTF8": "1" } },
+            "isBackground": true,
+            "problemMatcher": [],
+            "group": { "kind": "build", "isDefault": true }
+        }
+    ]
+}
