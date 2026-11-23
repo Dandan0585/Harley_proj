@@ -30,8 +30,9 @@ Transações (Vendas), Ordens de Serviço e Itens de Ordem de Serviço.
 ## O que o app faz
 
 - **Tela inicial** (`/`) — logo Harley-Davidson sobre fundo preto, com o
-  botão **ENTRAR** que leva ao login (`/login`). Depois do login o usuário
-  vai para o Painel (`/painel`). O logo fica em `assets/harley_logo.png`
+  botão **ENTRAR** que leva ao login (`/login`). Depois do login o
+  administrador vai para o Painel (`/painel`) e o funcionário para
+  Vendas / Balcão (`/vendas`). O logo fica em `assets/harley_logo.png`
   e as cores da marca em `harley_store/components/tema.py`.
 - **Painel** (`/painel`) — visual Harley (preto + laranja): motos em
   estoque, **Estoque de Motos** (preço de compra) e **Estoque de Produtos**
@@ -399,9 +400,16 @@ simulado, incluindo vendas simultâneas):
 ## Contas, perfis e senhas
 
 - Não existe cadastro público: só um **administrador** cria contas, na tela
-  **Usuários do sistema** (que só aparece para administradores). Lá ele
+  **Usuários do sistema**. Lá ele
   também troca o e-mail, define uma nova senha, muda o perfil
   (Administrador / Funcionário) e exclui contas.
+- **Telas só de administrador:** Painel, Clientes, Funcionários e Usuários
+  do sistema. Todas as telas aparecem no menu para todos, mas o
+  funcionário vê nelas só o aviso "Você precisa ser um administrador para
+  acessar esta tela.". A regra vale no servidor: o `ExigeSessaoMiddleware`
+  (`harley_store/sessao.py`, lista `so_admin`) recusa qualquer evento
+  dessas telas vindo de quem não é administrador. Em Vendas e OS o
+  funcionário continua escolhendo o cliente e o funcionário responsável.
 - **Esqueci minha senha:** a pessoa pede a um administrador, que define
   uma nova senha para ela. (Antes, qualquer um trocava a senha de qualquer
   conta sabendo só o e-mail.)

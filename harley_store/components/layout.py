@@ -22,7 +22,8 @@ MENU_ITEMS = [
     ("/funcionarios", "id-card", "Funcionários"),
     ("/usuarios", "shield-user", "Usuários do sistema"),
 ]
-SO_ADMIN = {"/usuarios"}
+
+AVISO_SO_ADMIN = "Você precisa ser um administrador para acessar esta tela."
 
 
 def _menu_link(href: str, icon: str, label: str) -> rx.Component:
@@ -62,16 +63,12 @@ def sidebar() -> rx.Component:
                     height="auto",
                     style={"mixBlendMode": "lighten"},
                 ),
-                href="/painel",
+                href=AuthState.tela_inicial,
                 padding_bottom="0.75rem",
                 align_self="center",
             ),
-            *[
-                # itens só de administrador ficam ocultos para os demais (a regra vale no servidor)
-                rx.cond(AuthState.eh_admin, _menu_link(href, icon, label)) if href in SO_ADMIN
-                else _menu_link(href, icon, label)
-                for href, icon, label in MENU_ITEMS
-            ],
+            # todas as telas aparecem para todos; as só de administrador mostram um aviso
+            *[_menu_link(href, icon, label) for href, icon, label in MENU_ITEMS],
             rx.spacer(),
             rx.box(height="1px", width="100%", background=BORDA),
             rx.hstack(
@@ -113,8 +110,19 @@ def sidebar() -> rx.Component:
     )
 
 
-def page(*children: rx.Component, title: str, subtitle: str = "") -> rx.Component:
-    """Moldura padrão usada em todas as páginas: sidebar + cabeçalho + conteúdo."""
+def aviso_so_admin() -> rx.Component:
+    """Aviso mostrado no lugar do conteúdo das telas só de administrador."""
+    return rx.callout(AVISO_SO_ADMIN, icon="shield-alert", color_scheme="amber", width="100%")
+
+
+def page(*children: rx.Component, title: str, subtitle: str = "", so_admin: bool = False) -> rx.Component:
+    """Moldura padrão usada em todas as páginas: sidebar + cabeçalho + conteúdo.
+
+    `so_admin=True`: quem não é administrador vê só o aviso. É apenas a parte
+    visual; a regra vale no servidor (lista `so_admin` do ExigeSessaoMiddleware).
+    """
+    if so_admin:
+        children = (rx.cond(AuthState.eh_admin, rx.fragment(*children), aviso_so_admin()),)
     header_children = [
         rx.heading(title, size="7", weight="bold", letter_spacing="0.02em"),
         rx.box(height="3px", width="48px", background=LARANJA, border_radius="2px"),

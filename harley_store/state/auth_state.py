@@ -53,6 +53,16 @@ def _senha_valida(senha: str) -> bool:
     return bool(_SENHA_REGEX.match(senha))
 
 
+TELA_INICIAL_ADMIN = "/painel"
+TELA_INICIAL_FUNCIONARIO = "/vendas"
+
+
+def tela_inicial_do_perfil(perfil: str) -> str:
+    """Painel para o administrador; Vendas / Balcão para os demais, inclusive
+    quando o perfil ainda não foi conferido no Xano (o Painel é só de admin)."""
+    return TELA_INICIAL_ADMIN if perfil == "admin" else TELA_INICIAL_FUNCIONARIO
+
+
 _MENSAGEM_SENHA_INVALIDA = "A senha precisa ter pelo menos 8 caracteres, com letras e números."
 
 
@@ -90,6 +100,10 @@ class AuthState(rx.State):
     @rx.var
     def eh_admin(self) -> bool:
         return self.perfil == "admin"
+
+    @rx.var
+    def tela_inicial(self) -> str:
+        return tela_inicial_do_perfil(self.perfil)
 
     # ------------------------------------------------------------- sessão
 
@@ -161,9 +175,9 @@ class AuthState(rx.State):
 
     @rx.event
     async def redirecionar_se_ja_logado(self):
-        """Chamar no on_load da página de login — se já estiver logado, pula para o painel."""
+        """Chamar no on_load da página de login — se já estiver logado, pula para a tela inicial do perfil."""
         if self.auth_token and await self.validar_sessao() == SESSAO_OK:
-            return rx.redirect("/painel")
+            return rx.redirect(tela_inicial_do_perfil(self.perfil))
 
     # ------------------------------------------------------------- telas
 
@@ -204,7 +218,7 @@ class AuthState(rx.State):
         if not perfil:
             self._conferido_em = 0.0  # perfil não lido: confere de novo no próximo evento
         log.info("login usuario_id=%s perfil=%s", resultado["user_id"], perfil or "?")
-        return rx.redirect("/painel")
+        return rx.redirect(tela_inicial_do_perfil(perfil))
 
     @rx.event
     def sair(self):

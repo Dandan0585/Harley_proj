@@ -34,8 +34,8 @@ cadernos, anotações). Isso gera:
 
 | Usuário | O que faz no sistema |
 |---|---|
-| **Administrador** (dono/gerente) | Tudo o que o funcionário faz, mais criar e gerenciar as contas de acesso. |
-| **Funcionário** (vendedor, mecânico) | Opera o dia a dia: vendas, ordens de serviço, compras, cadastros e consulta ao painel. |
+| **Administrador** (dono/gerente) | Tudo o que o funcionário faz, mais o Painel financeiro, os cadastros de Clientes e de Funcionários e as contas de acesso (Usuários do sistema). |
+| **Funcionário** (vendedor, mecânico) | Opera o dia a dia: vendas, ordens de serviço, compras, produtos, fornecedores e motos dos clientes. Vê todas as telas no menu, mas Painel, Clientes, Funcionários e Usuários do sistema mostram o aviso "Você precisa ser um administrador para acessar esta tela." |
 | **Cliente da loja** | Não acessa o sistema; recebe e-mails (boas-vindas, parabéns pela compra de moto e confirmação de pagamento) e, quando paga por boleto ou cartão, a cobrança do Asaas por e-mail e SMS. |
 
 Cada conta de acesso nova recebe um e-mail de boas-vindas no e-mail cadastrado (sem a senha, que é entregue pessoalmente).

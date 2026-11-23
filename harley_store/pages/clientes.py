@@ -146,5 +146,6 @@ def clientes_page() -> rx.Component:
         ),
         lista_vazia(ClientesState.clientes, "Nenhum cliente encontrado."),
         title="Clientes",
+        so_admin=True,
         subtitle="Cadastro de clientes da loja e da oficina.",
     )

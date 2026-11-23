@@ -83,12 +83,15 @@ app.register_lifespan_task(pagamentos_servico.tarefa_periodica)
 
 # Toda ação destes states exige sessão conferida no Xano, inclusive eventos
 # mandados direto pelo websocket (ver sessao.py). Um state novo precisa
-# entrar nesta lista.
-app.add_middleware(ExigeSessaoMiddleware([
-    ClientesState, ComprasState, DashboardState, FornecedoresState, FuncionariosState,
-    ImpressaoState, MotosLojaState, MotosState, OrdensServicoState, ProdutosState,
-    UsuariosState, VendasState,
-]))
+# entrar numa das listas; os de `so_admin` (Painel, Clientes, Funcionários
+# e Usuários) só atendem o perfil administrador.
+app.add_middleware(ExigeSessaoMiddleware(
+    [
+        ComprasState, FornecedoresState, ImpressaoState, MotosLojaState, MotosState,
+        OrdensServicoState, ProdutosState, VendasState,
+    ],
+    so_admin=[ClientesState, DashboardState, FuncionariosState, UsuariosState],
+))
 
 app.add_page(
     inicio_page,

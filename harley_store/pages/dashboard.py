@@ -176,5 +176,6 @@ def dashboard_page() -> rx.Component:
             ),
         ),
         title="Painel",
+        so_admin=True,
         subtitle="Visão geral da loja, da oficina e do estoque de motos.",
     )

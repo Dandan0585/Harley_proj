@@ -116,5 +116,6 @@ def funcionarios_page() -> rx.Component:
         ),
         lista_vazia(FuncionariosState.funcionarios, "Nenhum funcionário encontrado."),
         title="Funcionários",
+        so_admin=True,
         subtitle="Vendedores, mecânicos e gerência.",
     )

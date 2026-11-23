@@ -2,7 +2,7 @@ import reflex as rx
 
 from ..components.confirm_dialog import confirm_delete_button
 from ..components.formulario import campo, mensagem_erro
-from ..components.layout import page
+from ..components.layout import aviso_so_admin, page
 from ..state.auth_state import AuthState
 from ..state.usuarios_state import PERFIS, UsuariosState
 
@@ -178,13 +178,7 @@ def usuarios_page() -> rx.Component:
     return page(
         rx.cond(
             UsuariosState.sem_permissao,
-            rx.callout(
-                "Esta tela é só para administradores do sistema. Peça a um administrador para "
-                "criar contas, redefinir senhas ou mudar perfis.",
-                icon="shield-alert",
-                color_scheme="amber",
-                width="100%",
-            ),
+            aviso_so_admin(),  # o Xano recusou a listagem
             rx.fragment(
                 _formulario(),
                 rx.box(
@@ -208,5 +202,6 @@ def usuarios_page() -> rx.Component:
             ),
         ),
         title="Usuários do sistema",
+        so_admin=True,
         subtitle="Contas de acesso: criar, redefinir senha, definir perfil e remover acessos.",
     )
